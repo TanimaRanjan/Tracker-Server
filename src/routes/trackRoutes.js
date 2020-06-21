@@ -13,7 +13,7 @@ router.get('/tracks', async(request, response) => {
     response.send(tracks)
 })
 
-router.post('/tracks', async(request, response) => {
+router.post('/tracks', async (request, response) => {
 
     const { name, locations } = request.body
     console.log('/TRACKS ', name, locations)
