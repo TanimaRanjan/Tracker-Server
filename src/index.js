@@ -2,14 +2,16 @@ require('./models/User')
 const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
-const mongooseURL = require('../config/config')
+const config = require('../config/config')
 const authRoutes = require('./routes/authRoutes')
+const requireAuth = require('./middleware/requireAuth')
+
 const app = express()
 
 app.use(bodyParser.json())
 app.use(authRoutes)
 
-mongoose.connect(mongooseURL.MONGODB, {
+mongoose.connect(config.MONGODB, {
     useNewUrlParser:true,
     useCreateIndex:true,
     useUnifiedTopology:true
@@ -23,8 +25,8 @@ mongoose.connection.on('error', (error) => {
     console.log('Error connecting to mongo', error)
 })
 
-app.get('/', (request, response) => {
-    response.send('HELLO')
+app.get('/', requireAuth, (request, response) => {
+    response.send(`you email ${request.user.email}`)
 })
 
 app.listen(3000, () => {
